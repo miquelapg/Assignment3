@@ -12,7 +12,7 @@
                 </div>
                 <div class="form-group">
                     <label for="genreTextField">Genre</label>
-                    <input type="text" class="form-control" id="genreTextField" placeholder="Enter the Genre" name="Year" value="<%= Movie.Genre%>" required>
+                    <input type="text" class="form-control" id="genreTextField" placeholder="Enter the Genre" name="Genre" value="<%= Movie.Genre%>" required>
                 </div>
                 <div class="form-group">
                     <label for="yearTextField">Year</label>
@@ -24,8 +24,9 @@
                 </div>
                 <button class="btn btn-primary" type="submit">Submit
                 <i class="fas fa-edit"></i></button>  
-                <button class="btn btn-warning" type="submit">Cancel
-                    <i class="fas fa-undo"></i></button>    
+                <a href="/movieslist" class="btn btn-warning">
+                Cancel
+                <i class="fas fa-undo"></i></a> 
             </form>
         </div>
     </div>

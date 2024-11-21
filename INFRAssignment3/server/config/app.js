@@ -4,8 +4,17 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 
+let app = express();
+let indexRouter = require('../routes/index');
+let usersRouter = require('../routes/users');
+let movieRouter = require('../routes/movie');
+//const { constants } = require('fs/promises');
+
+// view engine setup
+app.set('views', path.join(__dirname, '../views'));
+app.set('view engine', 'ejs');
 //configure mongoDB
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
 let DB = require('./db')
 
 //pointing mongoose to DB URI
@@ -16,16 +25,6 @@ mongoDB.once('open', ()=>{
   console.log('connected to the MongoDB')
 });
 mongoose.connect(DB.URI,{useNewURIParser:true,useUnifiedTopology:true})
-
-let indexRouter = require('../routes/index');
-let usersRouter = require('../routes/users');
-let movieRouter = require('../routes/movie')
-
-let app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, '../views'));
-app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());

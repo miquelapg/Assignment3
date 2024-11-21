@@ -1,28 +1,24 @@
-let express = require('express');
-let router = express.Router();
+var express = require('express');
+var router = express.Router();
 let mongoose = require('mongoose');
+let Movie = require('../models/movie');
 const movie = require('../models/movie');
 
-//connecting with movie model
-let Movie = require('../models/movie')
-
-/*Read Operation */
-/* Getting Route for movie list */
-router.get('/', async(req,res,next)=>{
+/*Read Operation -- Getting Route for movie list */
+router.get('/',async(req,res,next)=>{
     try{
         const MovieList = await Movie.find();
-        res.render('Movie/list', {
+        res.render('Movie/list',{
             title:'Movies',
             MovieList:MovieList
-        })
-    }
-    catch(err){
-        console.error(err)
-        res.render('Movie/list',{
-            error:'Error on Server'})
-
-    }
-})
+        })}
+        catch(err){
+            console.error(err);
+            res.render('Movie/list',{
+                error:'Error on the server'
+            })
+        }
+        });
 /*Create Operation -- Get route for display Add Movie Page */
 router.get('/add',async(req,res,next)=>{
     try{
@@ -45,8 +41,7 @@ router.post('/add',async(req,res,next)=>{
             "Name":req.body.Name,
             "Genre":req.body.Genre,
             "Year":req.body.Year,
-            "Review":req.body.Review,
-            
+            "Review" : req.body.Review
         });
         Movie.create(newMovie).then(()=>{
             res.redirect('/movieslist');
@@ -75,7 +70,7 @@ router.get('/edit/:id',async(req,res,next)=>{
     catch(err)
     {
         console.error(err);
-        next(err); // passing error
+        next(err);
     }
 });
 /* Update Operation --> Post route for processing Edit Page */ 
@@ -86,8 +81,8 @@ router.post('/edit/:id',async(req,res,next)=>{
             "_id":id,
             "Name":req.body.Name,
             "Genre":req.body.Genre,
-            "Year":req.body.Year,
-            "Review":req.body.Review,
+            "Year": req.body.Year,
+            "Review":req.body.Review
         });
         Movie.findByIdAndUpdate(id,updatedMovie).then(()=>{
             res.redirect('/movieslist')

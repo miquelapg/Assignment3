@@ -1,4 +1,4 @@
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
 //creating movie model
 let movieModel = mongoose.Schema({
     Name: String,
