@@ -1,6 +1,7 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 let mongoose = require('mongoose');
+
 let Movie = require('../models/movie');
 const movie = require('../models/movie');
 
