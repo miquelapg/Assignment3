@@ -16,14 +16,14 @@
                     <th class="text-center col-5">Review</th>
                 </tr>
                 <% for(let count=0;count<MovieList.length;count++) { %>
-                <tr class="d-flex">
-                    <td class="text-center col-2"><%= MovieList[count].Name %></td>
-                    <td class="text-center col-2"><%= MovieList[count].Genre %> </td>
-                    <td class="text-center col-1"><%= MovieList[count].Year %></td>
-                    <td class="col-5"><%= MovieList[count].Review %></td>
-                    <td class="text-center col-1">
-                        <a href="/movieslist/edit/<%= MovieList[count]._id%>"
-                            class="btn btn-primary btn-sm">
+                    <tr class="d-flex">
+                        <td class="text-center col-2"><%= MovieList[count].Name %></td>
+                        <td class="text-center col-2"><%= MovieList[count].Genre %> </td>
+                        <td class="text-center col-1"><%= MovieList[count].Year %></td>
+                        <td class="col-5"><%= MovieList[count].Review %></td>
+                        <td class="text-center col-1">
+                            <a href="/movieslist/edit/<%= MovieList[count]._id%>"
+                                class="btn btn-primary btn-sm">
                         <i class="fas fa-pencil-alt"></i>Edit
                     </a>
                     </td>

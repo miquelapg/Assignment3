@@ -1,26 +1,26 @@
-let express = require('express');
-let router = express.Router();
+var express = require('express');
+var router = express.Router();
 let mongoose = require('mongoose');
+// telling my router that I have this model
+let Movie = require('../models/movie.js');
+const movie = require('../models/movie.js');
+let movieController = require('../controllers/movie.js')
 
-let Movie = require('../models/movie');
-const movie = require('../models/movie');
-
-/*Read Operation -- Getting Route for movie list */
 router.get('/',async(req,res,next)=>{
-    try{
-        const MovieList = await Movie.find();
+try{
+    const MovieList = await Movie.find();
+    res.render('Movie/list',{
+        title:'Movies',
+        MovieList:MovieList
+    })}
+    catch(err){
+        console.error(err);
         res.render('Movie/list',{
-            title:'Movies',
-            MovieList:MovieList
-        })}
-        catch(err){
-            console.error(err);
-            res.render('Movie/list',{
-                error:'Error on the server'
-            })
-        }
-        });
-/*Create Operation -- Get route for display Add Movie Page */
+            error:'Error on the server'
+        })
+    }
+    });
+/* Create Operation --> Get route for displaying me the Add Page */
 router.get('/add',async(req,res,next)=>{
     try{
         res.render('Movie/add',{
@@ -35,14 +35,14 @@ router.get('/add',async(req,res,next)=>{
         })
     }
 });
-/*Create Operation -- Post route for processing Add Movie Page */
+/* Create Operation --> Post route for processing the Add Page */
 router.post('/add',async(req,res,next)=>{
     try{
         let newMovie = Movie({
             "Name":req.body.Name,
             "Genre":req.body.Genre,
-            "Year":req.body.Year,
-            "Review" : req.body.Review
+            "Year": req.body.Year,
+            "Review":req.body.Review
         });
         Movie.create(newMovie).then(()=>{
             res.redirect('/movieslist');
@@ -56,7 +56,7 @@ router.post('/add',async(req,res,next)=>{
         })
     }
 });
-/*Update Operation -- Get route for display Edit Page */
+/* Update Operation --> Get route for displaying me the Edit Page */
 router.get('/edit/:id',async(req,res,next)=>{
     try{
         const id = req.params.id;
@@ -71,10 +71,10 @@ router.get('/edit/:id',async(req,res,next)=>{
     catch(err)
     {
         console.error(err);
-        next(err);
+        next(err); // passing the error
     }
 });
-/* Update Operation --> Post route for processing Edit Page */ 
+/* Update Operation --> Post route for processing the Edit Page */ 
 router.post('/edit/:id',async(req,res,next)=>{
     try{
         let id=req.params.id;
@@ -96,7 +96,7 @@ router.post('/edit/:id',async(req,res,next)=>{
         })
     }
 });
-/* Delete Operation --> Get route to do Delete Operation */
+/* Delete Operation --> Get route to perform Delete Operation */
 router.get('/delete/:id',async(req,res,next)=>{
     try{
         let id=req.params.id;
@@ -111,5 +111,4 @@ router.get('/delete/:id',async(req,res,next)=>{
         })
     }
 });
-
-module.exports = router
+module.exports = router;
