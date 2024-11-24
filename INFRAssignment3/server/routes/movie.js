@@ -1,16 +1,23 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 let mongoose = require('mongoose');
-// telling my router that I have this model
-let Movie = require('../models/movie.js');
-const movie = require('../models/movie.js');
-let movieController = require('../controllers/movie.js')
+let Movie = require('../models/movie');
+const movie = require('../models/movie');
+
+function requireAuth(req,res,next){
+    if(!req.isAuthenticated()){
+        return res.redirect('/login');
+    }
+    next();
+}
+
 
 router.get('/',async(req,res,next)=>{
 try{
     const MovieList = await Movie.find();
     res.render('Movie/list',{
         title:'Movies',
+        displayName: req.user? req.user.displayName:'',
         MovieList:MovieList
     })}
     catch(err){
@@ -20,11 +27,13 @@ try{
         })
     }
     });
-/* Create Operation --> Get route for displaying me the Add Page */
+
+    
 router.get('/add',async(req,res,next)=>{
     try{
         res.render('Movie/add',{
-            title: 'Add Movie'
+            title: 'Add Movie',
+            displayName: req.user? req.user.displayName:''
         })
     }
     catch(err)
@@ -35,13 +44,13 @@ router.get('/add',async(req,res,next)=>{
         })
     }
 });
-/* Create Operation --> Post route for processing the Add Page */
+
 router.post('/add',async(req,res,next)=>{
     try{
         let newMovie = Movie({
             "Name":req.body.Name,
             "Genre":req.body.Genre,
-            "Year": req.body.Year,
+            "Year":req.body.Year,
             "Review":req.body.Review
         });
         Movie.create(newMovie).then(()=>{
@@ -56,7 +65,7 @@ router.post('/add',async(req,res,next)=>{
         })
     }
 });
-/* Update Operation --> Get route for displaying me the Edit Page */
+
 router.get('/edit/:id',async(req,res,next)=>{
     try{
         const id = req.params.id;
@@ -64,6 +73,8 @@ router.get('/edit/:id',async(req,res,next)=>{
         res.render('Movie/edit',
             {
                 title:'Edit Movie',
+                displayName: req.user? req.user.displayName:'',
+
                 Movie:movieToEdit
             }
         )
@@ -71,10 +82,10 @@ router.get('/edit/:id',async(req,res,next)=>{
     catch(err)
     {
         console.error(err);
-        next(err); // passing the error
+        next(err);
     }
 });
-/* Update Operation --> Post route for processing the Edit Page */ 
+
 router.post('/edit/:id',async(req,res,next)=>{
     try{
         let id=req.params.id;
@@ -82,7 +93,7 @@ router.post('/edit/:id',async(req,res,next)=>{
             "_id":id,
             "Name":req.body.Name,
             "Genre":req.body.Genre,
-            "Year": req.body.Year,
+            "Year":req.body.Year,
             "Review":req.body.Review
         });
         Movie.findByIdAndUpdate(id,updatedMovie).then(()=>{
@@ -96,7 +107,6 @@ router.post('/edit/:id',async(req,res,next)=>{
         })
     }
 });
-/* Delete Operation --> Get route to perform Delete Operation */
 router.get('/delete/:id',async(req,res,next)=>{
     try{
         let id=req.params.id;
