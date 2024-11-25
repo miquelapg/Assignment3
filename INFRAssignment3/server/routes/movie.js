@@ -4,6 +4,7 @@ let mongoose = require('mongoose');
 let Movie = require('../models/movie');
 const movie = require('../models/movie');
 
+//Authentication
 function requireAuth(req,res,next){
     if(!req.isAuthenticated()){
         return res.redirect('/login');
@@ -11,7 +12,7 @@ function requireAuth(req,res,next){
     next();
 }
 
-
+//Router GET
 router.get('/',async(req,res,next)=>{
 try{
     const MovieList = await Movie.find();
@@ -27,7 +28,21 @@ try{
         })
     }
     });
-
+    router.get('/home',async(req,res,next)=>{
+        try{
+            const MovieList = await Movie.find();
+            res.render('Movie/list',{
+                title:'Movies',
+                displayName: req.user? req.user.displayName:'',
+                MovieList:MovieList
+            })}
+            catch(err){
+                console.error(err);
+                res.render('Movie/list',{
+                    error:'Error on the server'
+                })
+            }
+            });
     
 router.get('/add',async(req,res,next)=>{
     try{
